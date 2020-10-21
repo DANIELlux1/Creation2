@@ -1,0 +1,83 @@
+/*----------------------------------------------
+                BASIC SETUP
+------------------------------------------------*/
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+}
+
+html{
+    color: #555;
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    font-size: 20px;
+    text-rendering: optimizeLegibility;
+}
+
+.clearfix:after{
+    content: ".";
+    clear: both;
+    display: block;
+    height: 0;
+    visibility: hidden;
+}
+
+.addFrame{
+    margin-top: 40px;
+    width: 100%;
+    text-align: center;
+}
+
+/*----------------------------------------------
+              REUSEABLE COMPONENTS
+------------------------------------------------*/
+
+.page{
+    max-width: 80%;
+    margin: 0 auto 0 auto;
+}
+
+.frame {
+    width: 100%;
+    height: auto;
+    overflow: auto; /* Overflow due to float */
+}
+
+.panel{
+    position: relative;
+    float: left;
+    width: 50%;
+    height: 300px;
+    display: block;
+}
+
+.content{
+    position: absolute;
+    max-width: 88%;
+    max-height: 100%;
+    border: black solid 1px;
+    top: 50px;
+    left: 100px;
+}
+
+p {
+    margin-top: 20px;
+    font-size: 90%;
+    line-height: 145%;
+    text-align: justify;
+}
+
+/*************************************************
+                        IMAGE
+**************************************************/
+
+
+.panel .content span img {
+    max-width: auto;
+    max-height: 200px;
+    display: block;
+    margin: auto;
+}
