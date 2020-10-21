@@ -282,60 +282,26 @@
 
     function __construct($fetch)
     {
-        $temp = json_decode($fetch[0]["css_style"]);
-        foreach($temp->styles as $style)
+        $data = json_decode($fetch[0]["css_style"]);
+        foreach($data->styles as $style)
         {
             array_push($this->styles, new StyleCSS($style->class, $style->style));
         }
-    }
-
-    function printJSON(){
-        $i = 0;
-        $jsonObj = '{ "styles": [';
-
-        foreach($this->styles as $style)
-        {
-            $jsonObj .= $style->printJSON();
-            if($i++ < count($this->styles)-1)
-            {
-                $jsonObj .= ",";
-            }
-        }
-
-        $jsonObj .= "]}";
-        return $jsonObj;
     }
  }
 
  class StyleCSS {
 
-    var $cssClass;
-    var $cssStyle;
+    var $class;
+    var $style;
 
     function __construct($cssClass, $cssStyle)
     {
-        $this->cssClass = $cssClass;
-        $this->cssStyle = $cssStyle;
+        $this->class = $cssClass;
+        $this->style = $cssStyle;
     }
 
-    function printJSON(){
 
-        $i = 0;
-        $jsonObj  = '{';
-        $jsonObj .= '"class": "' . $this->cssClass . '",';
-        $jsonObj .= '"style": [';
-        foreach($this->cssStyle as $value)
-        {
-            $jsonObj .= '"'. $value .'"';
-            if($i++ < count($this->cssStyle)-1)
-            {
-                $jsonObj .= ",";
-            }
-        }
-        $jsonObj .= "]}";
-
-        return $jsonObj;
-    }
  }
 
 ?>

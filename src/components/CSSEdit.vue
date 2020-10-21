@@ -8,9 +8,12 @@
                 <li 
                     v-for="(rule, i) in getStyles" 
                     :key="i">
-                    <input 
+                    <div>
+                        <input 
                         type="text" 
-                        v-model="getStyles[i]">
+                        v-model.lazy="getStyles[i]">
+                    <button @click="deleteRule(i)">X</button>
+                    </div>
                 </li>
             </ul>
             
@@ -45,18 +48,17 @@
             updateRule(){
                 var sheet = this.styleSheet.sheet;
                 for(var i = 0; i < this.styles.length; i++){
-                    
                     if(this.styles[i].class == this.currentClass){
                         var style = this.styles[i].style;
                         for(var j = 0; j < sheet.cssRules.length; j++){
-                            if(sheet.rules[j].selectorText === this.currentClass){
-                                console.log("Style has been updated.");
-                                sheet.rules[j].style = this.printStyle(style);
+                            console.log(sheet.cssRules[j].selectorText);
+                            if(sheet.cssRules[j].selectorText == this.currentClass){
+                                sheet.cssRules[j].style = this.printStyle(style);
                                 break;
                             }
                         }
+                        break;
                     }
-                    break;
                 }
             },
             printStyle(style){
@@ -68,6 +70,13 @@
                 }
 
                 return cssStyle;
+            },
+            deleteRule(index){
+                for(var i = 0; i < this.styles.length; i++){
+                    if(this.styles[i].class == this.currentClass){
+                        this.styles[i].style.splice(index,1);
+                    }
+                }
             }
         },
         computed: {
@@ -97,11 +106,6 @@
 
                 for(var i = 0; i < this.styles.length; i++){
                     cssStyle = "{"
-                    /*for(var j = 0;j < this.styles[i].style.length; j++)
-                    {
-
-                        cssStyle += this.styles[i].style[j];
-                    }*/
                     cssStyle += this.printStyle(this.styles[i].style);
                     cssStyle += "}";
                     cssClass = this.styles[i].class;
@@ -125,17 +129,14 @@
         border: black 1px solid;
     }
 
-    .css-edit input {
-        margin: 16px 0;
-    }
-
     .css-edit ul{
         padding-left: 20%;
         list-style: none;
     }
 
-    .css-edit button{
-        margin-left: 35%;
+    .css-edit li{
+        margin: 16px 0;
     }
+
 
 </style>

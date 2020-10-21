@@ -1,5 +1,5 @@
 <template>
-    <div class="page">
+    <div :class="'page'">
         <app-frame 
             v-for="frame in page.frames" 
             :frame="frame" 
@@ -119,8 +119,6 @@
                 'http://192.168.22.123/CreationTestEnv/creation2/src/includes/get.php'
             ).then(({data}) => {
                 this.options = data;
-
-                console.log(this.options[0].frame_id);
             })
         }
 

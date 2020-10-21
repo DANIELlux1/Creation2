@@ -1,5 +1,5 @@
 <template>
-    <div class="frame">
+    <div :class="'frame'">
         <div class="icon-bar">
             <a href="#" @click.prevent="sendData('del')"  >&#128465; <i class="nav"></i></a>
             <a href="#" @click.prevent="sendData('down')" >&#9759;<i class="nav"></i></a>
