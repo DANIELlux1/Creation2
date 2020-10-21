@@ -1,6 +1,7 @@
 <template>
     <div class="css-edit">
         <select v-model="currentClass">
+            <option disabled value="">Select a Class to edit</option>
             <option v-for="style in styles" :value="style.class" :key="style.class">{{ style.class }}</option>
         </select>
         <div v-if="currentClass != ''" >
@@ -94,7 +95,7 @@
         },
         mounted(){
             this.$http.get(
-                'http://192.168.22.123/CreationTestEnv/creation2/src/includes/jsonFetcher.php'
+                'http://192.168.22.123/CreationTestEnv/creation2/src/includes/handler.php?style=1'
             ).then(({data})=>{
                 this.styles = data.styles;
                 var cssClass="";

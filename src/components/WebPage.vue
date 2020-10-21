@@ -33,7 +33,7 @@
             }
         },mounted(){
             this.$http.get(
-                'http://192.168.22.123/CreationTestEnv/creation2/src/includes/fetch.php'
+                'http://192.168.22.123/CreationTestEnv/creation2/src/includes/handler.php?page=1'
             ).then(({data})=>{
                 this.webPageId = data.webPageId;
                 this.webPageName = data.webPageName;

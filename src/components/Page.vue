@@ -87,7 +87,7 @@
                 this.$forceUpdate(); 
             },
             addFrame(){
-                this.$http.get("http://192.168.22.123/CreationTestEnv/creation2/src/includes/get2.php?id=" + this.selected).then(({data}) =>{
+                this.$http.get("http://192.168.22.123/CreationTestEnv/creation2/src/includes/handler.php?frame=" + this.selected).then(({data}) =>{
                     this.page.frames.push(data);
                     this.page.frames[this.page.frames.length - 1].position = this.page.frames.length - 1;
                 })
@@ -116,7 +116,7 @@
             });
 
             this.$http.get(
-                'http://192.168.22.123/CreationTestEnv/creation2/src/includes/get.php'
+                'http://192.168.22.123/CreationTestEnv/creation2/src/includes/handler.php?frametype=all'
             ).then(({data}) => {
                 this.options = data;
             })
