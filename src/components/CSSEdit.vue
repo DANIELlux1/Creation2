@@ -2,7 +2,11 @@
     <div class="css-edit">
         <select v-model="currentClass">
             <option disabled value="">Select a Class to edit</option>
-            <option v-for="style in styles" :value="style.class" :key="style.class">{{ style.class }}</option>
+            <option 
+                v-for="style in styles" 
+                :value="style.class" 
+                :key="style.class">
+            {{ style.class }}</option>
         </select>
         <div v-if="currentClass != ''" >
             <ul>
@@ -52,7 +56,6 @@
                     if(this.styles[i].class == this.currentClass){
                         var style = this.styles[i].style;
                         for(var j = 0; j < sheet.cssRules.length; j++){
-                            console.log(sheet.cssRules[j].selectorText);
                             if(sheet.cssRules[j].selectorText == this.currentClass){
                                 sheet.cssRules[j].style = this.printStyle(style);
                                 break;

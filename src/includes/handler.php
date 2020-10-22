@@ -14,7 +14,5 @@
     }
     if(isset($_GET['frametype'])){
         getFrameTypes();
-    }else{
-
     }
 ?>
