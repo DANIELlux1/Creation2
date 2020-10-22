@@ -35,6 +35,7 @@
             this.$http.get(
                 'http://192.168.22.123/CreationTestEnv/creation2/src/includes/handler.php?page=1'
             ).then(({data})=>{
+                console.log(data.pages[0].frames);
                 this.webPageId = data.webPageId;
                 this.webPageName = data.webPageName;
                 this.pages = data.pages;
