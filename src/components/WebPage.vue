@@ -5,6 +5,7 @@
             :page="page" 
             :key="page.pageId"/>
         <app-css-edit></app-css-edit>
+        <button @click=postFunc()>SEE JSON OF DATA</button>
     </div>
 </template>
 
@@ -30,12 +31,19 @@
             },
             logPages(){
                 console.log(this.currentClass);
+            },
+            postFunc(){
+                this.$http.post('http://192.168.22.123/CreationTestEnv/creation2/src/includes/rec.php', JSON.stringify({ webId: this.webPageId, webName: this.webName, pages: this.pages})
+                ).then(({data}) => {
+                    console.log(data);
+                }).catch(error => { 
+                    console.log(error); 
+                })
             }
         },mounted(){
             this.$http.get(
                 'http://192.168.22.123/CreationTestEnv/creation2/src/includes/handler.php?page=1'
             ).then(({data})=>{
-                console.log(data.pages[0].frames);
                 this.webPageId = data.webPageId;
                 this.webPageName = data.webPageName;
                 this.pages = data.pages;

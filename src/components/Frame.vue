@@ -40,7 +40,7 @@
     import EventBus from '../includes/eventBus.js';
 
     export default{
-        props: ['frame'],
+        props: ['frame',"index"],
         components: {
             appPanel: Panel
         },
@@ -49,26 +49,29 @@
         },
         methods: {
             sendData(input){
-                const payload = {input, index: this.frame.position};
+                const payload = {input, index: this.index};
                 
                 switch(input){
                     case "up":
-                        console.log("up");
                         EventBus.$emit('UPDATE_FRAMES', payload);
                         break;
                     case "down":
-                        console.log("down");
                         EventBus.$emit('UPDATE_FRAMES', payload);
                         break;
                     case "del":
-                        console.log("del");
                         EventBus.$emit('UPDATE_FRAMES', payload);
                         break;   
                 }
             },
+            seePosition(){
+                console.log(this.frame.position);
+            },
             force(){
                 this.$forceUpdate(); 
             }
+        },
+        updated(){
+            this.frame.position = this.index;
         }
     }
 </script>

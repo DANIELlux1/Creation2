@@ -5,9 +5,11 @@
 *********************************************************/
 
     class WebPage {
-        var $webPageId;
-        var $webPageName;
-        var $pages = [];
+        public $webPageId;
+        public $webPageName;
+        public $pages = [];
+
+        private $indexing = [];
 
         function __construct($id, $name){
             $this->webPageId = $id;
@@ -22,32 +24,14 @@
             $name     = $fetch["page_name"];
             $shown    = $fetch["page_shown"];
 
-            if(!array_key_exists($i, $this->pages)){
-                $this->pages[$i] = new Page($id, $class, $name, $shown);
+            if(!array_key_exists($i, $this->indexing)){
+                $this->indexing[$i] = count($this->indexing);
+
+                array_push($this->pages, new Page($id, $class, $name, $shown));
             }
 
-            $this->pages[$i]->addFrame($fetch);
+            $this->pages[$this->indexing[$i]]->addFrame($fetch);
         }
-
-        function printJSON(){
-            $i=0;
-            $jsonObj  = '{ "webPageId": "'    . $this->webPageId    . '",';
-            $jsonObj .=   '"webPageName": "'  . $this->webPageName  . '",';
-            $jsonObj .= '"pages": [';
-            foreach($this->pages as $page)
-            {
-                $jsonObj .= $page->printJSON();
-                if($i < count($this->pages) - 1)
-                {
-                    $jsonObj .= ",";
-                }
-                $i++;
-            }
-            $jsonObj .= ']}';
-
-            return $jsonObj;
-        }
-
     }
 
 /********************************************************
@@ -55,17 +39,19 @@
 *********************************************************/
 
     class Page {
-        var $pageId;
-        var $pageClass;
-        var $pageName;
-        var $pageShown;
-        var $frames = [];
+        public $pageId;
+        public $pageClass;
+        public $pageName;
+        public $pageShown;
+        public $frames = [];
+
+        private $indexing = [];
 
         function __construct($id, $class, $name, $shown){
             $this->pageId       = $id;
             $this->pageClass    = $class;
             $this->pageName     = $name;
-            $this->pageShown    = ($shown == '0' ? "false" : "true");
+            $this->pageShown    = ($shown == '0' ? false : true);
         }
 
         function addFrame($fetch){
@@ -76,37 +62,15 @@
             $name     = $fetch["frame_name"];
             $show     = $fetch["frame_show"];
 
-            if(!array_key_exists($i, $this->frames)){
-                $this->frames[$i] = new Frame($id, $class, $type, $name, $show);
+            if(!array_key_exists($i, $this->indexing)){
+                $this->indexing[$i] = count($this->indexing);
+
+                array_push($this->frames, new Frame($id, $class, $type, $name, $show, $this->indexing[$i]));
             }
 
-            $this->frames[$i]->addPanel($fetch);
+            $this->frames[$this->indexing[$i]]->addPanel($fetch);
         }
 
-        function printJSON(){
-            $i=0;
-            $jsonObj  = '{';
-            $jsonObj .= '"pageId": "'   .   $this->pageId    . '",';
-            $jsonObj .= '"pageClass": "'.   $this->pageClass . '",';
-            $jsonObj .= '"pageName": "' .   $this->pageName  . '",';
-            $jsonObj .= '"pageShown": ' .   $this->pageShown . ',';
-            $jsonObj .= '"frames": [';
-
-            foreach($this->frames as $frame)
-            {
-                $jsonObj .= $frame->printJSON();
-                if($i < count($this->frames) - 1)
-                {
-                    $jsonObj .= ",";
-                }
-                $i++;
-            }
-
-            $jsonObj .= "]}";
-
-            return $jsonObj;
-
-        }
     }
 
 /********************************************************
@@ -114,21 +78,23 @@
 *********************************************************/
 
     class Frame {
-        var $frameId;
-        var $frameClass;
-        var $frameType;
-        var $frameName;
-        var $frameShow;
-        var $pos = 0;
-        
-        var $panels = [];
+        public $frameId;
+        public $frameClass;
+        public $frameType;
+        public $frameName;
+        public $frameShow;
+        public $position;
+        public $panels = [];
 
-        function __construct($id, $class, $type, $name, $show){
+        private $indexing = [];
+
+        function __construct($id, $class, $type, $name, $show, $pos = 0){
             $this->frameId      = $id;
             $this->frameClass   = $class;
             $this->frameType    = $type;
             $this->frameName    = $name;
-            $this->frameShow    = ($show == '0' ? "false" : "true");
+            $this->frameShow    = ($show == '0' ? false : true);
+            $this->position    = $pos;
         }
 
         function addPanel($fetch){
@@ -142,38 +108,12 @@
             }
             $name      = $fetch["panel_name"];
 
-            if(!array_key_exists($i, $this->panels)){
-                $this->panels[$i] = new Panel($id, $class, $type, $name);
+            if(!array_key_exists($i, $this->indexing)){
+                $this->indexing[$i] = count($this->indexing);
+                array_push($this->panels, new Panel($id, $class, $type, $name));
             }
 
-            $this->panels[$i]->addContent($fetch);
-        }
-
-        function printJSON(){
-            $i=0;
-            $jsonObj  = '{';
-            $jsonObj .= '"frameId": "'   .   $this->frameId    . '",';
-            $jsonObj .= '"frameClass": "'.   $this->frameClass . '",';
-            $jsonObj .= '"frameType": "' .   $this->frameType  . '",';
-            $jsonObj .= '"frameName": "' .   $this->frameName  . '",';
-            $jsonObj .= '"position": '   .   $this->pos        . ',';
-            $jsonObj .= '"frameShow": '  .   $this->frameShow  . ',';
-            $jsonObj .= '"panels": [';
-
-            foreach($this->panels as $panel)
-            {
-                $jsonObj .= $panel->printJSON();
-                if($i < count($this->panels) - 1)
-                {
-                    $jsonObj .= ",";
-                }
-                $i++;
-            }
-
-            $jsonObj .= "]}";
-
-            return $jsonObj;
-
+            $this->panels[$this->indexing[$i]]->addContent($fetch);
         }
     }
 
@@ -182,11 +122,13 @@
 *********************************************************/
 
     class Panel {
-        var $panelId;
-        var $panelClass;
-        var $panelName;
-        var $panelType;
-        var $contents = [];
+        public $panelId;
+        public $panelClass;
+        public $panelName;
+        public $panelType;
+        public $contents = [];
+
+        private $indexing = [];
 
         function __construct($id, $class, $type, $name){
             $this->panelId      =   $id;
@@ -204,34 +146,11 @@
             $selected = $fetch["content_selected"];
             $contents = [];
 
-            if(!array_key_exists($i, $this->contents)){
-                $this->contents[$i] = new Content($id, $class, $type, $value, $selected);
+            if(!array_key_exists($i, $this->indexing)){
+                $this->indexing[$i] = count($this->indexing);
+
+                array_push($this->contents, new Content($id, $class, $type, $value, $selected));
             }
-
-        }
-
-        function printJSON(){
-            $i=0;
-            $jsonObj  = '{';
-            $jsonObj .=     '"panelId": "'   .   $this->panelId    . '",';
-            $jsonObj .=     '"panelClass": "'.   $this->panelClass . '",';
-            $jsonObj .=     '"panelName": "' .   $this->panelName  . '",';
-            $jsonObj .=     '"panelType": "' .   $this->panelType  . '",';
-            $jsonObj .=     '"contents": [';
-
-            foreach($this->contents as $content)
-            {
-                $jsonObj .= $content->printJSON();
-                if($i < count($this->contents) - 1)
-                {
-                    $jsonObj .= ",";
-                }
-                $i++;
-            }
-
-            $jsonObj .= "]}";
-
-            return $jsonObj;
 
         }
     }
@@ -241,11 +160,11 @@
 *********************************************************/    
 
     class Content {
-        var $contentId;
-        var $contentType;
-        var $contentClass;
-        var $contentValue;
-        var $contentSelected;
+        public $contentId;
+        public $contentType;
+        public $contentClass;
+        public $contentValue;
+        public $contentSelected = "false";
         //var $panelId;
 
         function __construct($id, $class, $type, $value, $selected){
@@ -253,21 +172,7 @@
             $this->contentType      = $type;
             $this->contentClass     = $class;
             $this->contentValue     = $value;
-            $this->contentSelected  = "false";
-        }
-
-        function printJSON(){
-
-            $jsonObj  = '{';
-            $jsonObj .=     '"contentId": "'        .   $this->contentId        . '",';
-            $jsonObj .=     '"contentType": "'      .   $this->contentType      . '",';
-            $jsonObj .=     '"contentClass": "'     .   $this->contentClass     . '",';
-            $jsonObj .=     '"contentValue": "'     .   $this->contentValue     . '",';
-            $jsonObj .=     '"contentSelected": '   .   $this->contentSelected  . '';
-            $jsonObj .= '}';
-
-            return $jsonObj;
-
+            $this->contentSelected  = false;
         }
     }
 

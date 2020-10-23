@@ -33,11 +33,12 @@
 
             $test = new WebPage("1", "TestWebPage");
 
-            foreach($frame as $meme){
-                $test->addPage($meme);
+            foreach($frame as $data){
+                $test->addPage($data);
             }
 
-            echo $test->printJSON();
+            //echo $test->printJSON();
+            echo json_encode($test);
         }
     }
 
@@ -94,7 +95,8 @@
                 $frameObj->addPanel($panel);
             }
 
-            echo $frameObj->printJSON();
+            //echo $frameObj->printJSON();
+            echo json_encode($frameObj);
         }
     }
 

@@ -1,9 +1,10 @@
 <template>
     <div :class="'page'">
         <app-frame 
-            v-for="frame in page.frames" 
+            v-for="(frame, i) in page.frames" 
             :frame="frame" 
-            :key="frame.position"/>
+            :index="i"
+            :key="i"/>
         <div>
             <select v-model="selected">
                 <option disabled value="">Select Frame to ADD</option>
@@ -94,7 +95,7 @@
             }
         },
         created(){
-            this.sortFrames();
+            //this.sortFrames();
         },
         mounted () {
             EventBus.$on('UPDATE_FRAMES', (payload) => {
