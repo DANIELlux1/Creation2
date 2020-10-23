@@ -3,39 +3,49 @@
         <select v-model="currentClass">
             <option disabled value="">Select a Class to edit</option>
             <option 
-                v-for="style in styles" 
-                :value="style.class" 
-                :key="style.class">
+                    v-for="style in styles" 
+                    :value="style.class" 
+                    :key="style.class">
             {{ style.class }}</option>
         </select>
-        <div v-if="currentClass != ''" >
+        <button @click="addClassRequest = true">Add Class</button>
+        <button @click="removeClass()">Remove selected Class</button>
+        <div v-if="currentClass != '' && !addClassRequest" >
             <ul>
                 <li 
-                    v-for="(rule, i) in getStyles" 
-                    :key="i">
+                        v-for="(rule, i) in getStyles" 
+                        :key="i">
                     <div>
                         <input 
-                        type="text" 
-                        v-model.lazy="getStyles[i]">
-                    <button @click="deleteRule(i)">X</button>
+                                type="text" 
+                                v-model.lazy="getStyles[i]">
+                        <button @click="deleteRule(i)">X</button>
                     </div>
                 </li>
             </ul>
-            
             <button @click="addRule">Add Rule</button>
             <button @click="updateRule">Update Rules</button>
-
+        </div>
+        <div v-if="addClassRequest">
+            <input  
+                    v-model.lazy="toAdd" 
+                    type="text" >
+            <button @click="addClass()">Add</button>
         </div>
     </div>
 </template>
 
 <script>
 
+    import EventBus from '../includes/eventBus.js';
+
     export default{
         data: () => {
             return {
                 styles: [],
 
+                addClassRequest: false,
+                toAdd: "",
                 currentClass: "",
                 styleSheet: ""
             }
@@ -79,6 +89,20 @@
                 for(var i = 0; i < this.styles.length; i++){
                     if(this.styles[i].class == this.currentClass){
                         this.styles[i].style.splice(index,1);
+                        this.currentClass = "";
+                    }
+                }
+            },
+            addClass(){
+                this.styles.push({ class: this.toAdd, style: [""]});
+                this.addClassRequest = false;
+                this.currentClass = this.toAdd;
+            },
+            removeClass(){
+                for(var i = 0; i < this.styles.length; i++){
+                    if(this.styles[i].class == this.currentClass){
+                        this.styles.splice(i,1);
+                        break;
                     }
                 }
             }
@@ -118,6 +142,15 @@
                 
             }).catch((error) => {
                 console.log(error);
+            });
+
+            EventBus.$on('GET_CLASS', (payload) => {
+                if(!this.styles.includes(payload)){
+                    this.toAdd = payload;
+                    this.addClass;
+                }else{
+                    this.currentClass = payload;
+                }
             });
         }
     }

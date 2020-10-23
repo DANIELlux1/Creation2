@@ -1,9 +1,9 @@
 <template>
     <div :class="'frame'">
         <div class="icon-bar">
-            <a href="#" @click.prevent="sendData('del')"  >&#128465; <i class="nav"></i></a>
-            <a href="#" @click.prevent="sendData('down')" >&#9759;<i class="nav"></i></a>
-            <a href="#" @click.prevent="sendData('up')"   >&#9757;<i class="nav"></i></a>
+            <a href="#" @click.prevent="sendData('del')"  >&#128465;</a>
+            <a href="#" @click.prevent="sendData('down')" >&#9759;</a>
+            <a href="#" @click.prevent="sendData('up')"   >&#9757;</a>
             <div style="float: left; padding-top: 16px;">
                 <input 
                         type="checkbox" 
@@ -11,7 +11,9 @@
                 <label>Show Panel</label>
             </div>
             <div style="float: right; padding-top: 16px;">
-                <a href="#" @click.prevent="sendData('del')"
+                <a      
+                        @click.prevent=editClass()
+                        href="#"
                         style="
                                 padding: 0;
                                 margin: 0;
@@ -19,7 +21,7 @@
                                 text-align: center;
                                 width: 36px;
                                 transition: all 0.3s ease; " 
-                    >&#9776; <i class="nav"></i></a>
+                    >&#9776;</a>
                 <input 
                     style="margin-right: 16px;" 
                     type="text"
@@ -63,11 +65,20 @@
                         break;   
                 }
             },
-            seePosition(){
-                console.log(this.frame.position);
-            },
             force(){
                 this.$forceUpdate(); 
+            },
+            editClass(){
+                
+                console.log(this.frame.frameClass);
+
+                if(!this.frame.frameClass.match(/\.*/).includes(".")){
+                    this.frame.frameClass = "." + this.frame.frameClass;
+                }
+
+                console.log(this.frame.frameClass);
+                
+                EventBus.$emit('GET_CLASS', this.frame.frameClass);
             }
         },
         updated(){

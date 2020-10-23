@@ -95,7 +95,7 @@
             }
         },
         created(){
-            //this.sortFrames();
+            this.sortFrames();
         },
         mounted () {
             EventBus.$on('UPDATE_FRAMES', (payload) => {

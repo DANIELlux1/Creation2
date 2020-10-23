@@ -94,7 +94,7 @@
             $this->frameType    = $type;
             $this->frameName    = $name;
             $this->frameShow    = ($show == '0' ? false : true);
-            $this->position    = $pos;
+            $this->position     = $pos;
         }
 
         function addPanel($fetch){
@@ -102,9 +102,9 @@
             $id        = $fetch["panel_id"];
             $class     = $fetch["panel_class"];
             $type      = $fetch["panel_type"];
-            if(isset($fetch["position"]))                   //PLEASE FIX SOMETIME SOON.
+            if(isset($fetch["position"]))
             {
-                $this->pos = $fetch["position"];
+                $this->position = $fetch["position"];
             }
             $name      = $fetch["panel_name"];
 

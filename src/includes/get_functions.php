@@ -37,7 +37,6 @@
                 $test->addPage($data);
             }
 
-            //echo $test->printJSON();
             echo json_encode($test);
         }
     }
@@ -95,7 +94,6 @@
                 $frameObj->addPanel($panel);
             }
 
-            //echo $frameObj->printJSON();
             echo json_encode($frameObj);
         }
     }
