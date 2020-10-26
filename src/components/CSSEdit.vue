@@ -19,7 +19,7 @@
                         <input 
                                 type="text" 
                                 v-model.lazy="getStyles[i]">
-                        <button @click="deleteRule(i)">X</button>
+                        <button @click.prevent="deleteRule(i)">X</button>
                     </div>
                 </li>
             </ul>
@@ -89,7 +89,6 @@
                 for(var i = 0; i < this.styles.length; i++){
                     if(this.styles[i].class == this.currentClass){
                         this.styles[i].style.splice(index,1);
-                        this.currentClass = "";
                     }
                 }
             },
@@ -105,6 +104,7 @@
                         break;
                     }
                 }
+                this.currentClass = "";
             }
         },
         computed: {
@@ -145,12 +145,25 @@
             });
 
             EventBus.$on('GET_CLASS', (payload) => {
-                if(!this.styles.includes(payload)){
-                    this.toAdd = payload;
-                    this.addClass;
-                }else{
-                    this.currentClass = payload;
+                
+                var found = false;
+
+                for(var i = 0; i < this.styles.length; i++){
+
+                    if(this.styles[i].class == payload){
+                        found = true;
+                        break;
+                    }
+                    
                 }
+
+                if(!found){
+                    this.toAdd = payload;
+                    this.addClass();
+                }
+
+                this.currentClass = payload;
+
             });
         }
     }

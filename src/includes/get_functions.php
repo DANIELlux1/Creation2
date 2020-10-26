@@ -97,6 +97,7 @@
             echo json_encode($frameObj);
         }
     }
+    
 
     function getFrameTypes(){
         global $connection;
